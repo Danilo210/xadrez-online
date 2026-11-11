@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <rect width="1920" height="1080" fill="white"/>
+  <g font-family="Arial,Helvetica,sans-serif" fill="#424448" font-size="17">
+    <text x="46" y="45">Sobre</text><text x="119" y="45">Loja</text>
+    <text x="1688" y="45">Gmail</text><text x="1760" y="45">Imagens</text>
+    <g transform="translate(1850,27)" fill="#60646a">
+      <circle r="3" cx="0" cy="0"/><circle r="3" cx="12" cy="0"/><circle r="3" cx="24" cy="0"/>
+      <circle r="3" cx="0" cy="12"/><circle r="3" cx="12" cy="12"/><circle r="3" cx="24" cy="12"/>
+      <circle r="3" cx="0" cy="24"/><circle r="3" cx="12" cy="24"/><circle r="3" cx="24" cy="24"/>
+    </g>
+    <text x="1886" y="46" fill="#4385f6" font-size="23">●</text>
+  </g>
+  <g font-family="Arial,Helvetica,sans-serif" font-size="150" font-weight="500" text-anchor="middle">
+    <text x="820" y="440" fill="#4285F4">G</text>
+    <text x="922" y="440" fill="#EA4335">o</text>
+    <text x="1007" y="440" fill="#FBBC05">o</text>
+    <text x="1093" y="440" fill="#4285F4">g</text>
+    <text x="1166" y="440" fill="#34A853">l</text>
+    <text x="1216" y="440" fill="#EA4335">e</text>
+  </g>
+  <rect x="570" y="484" rx="30" width="780" height="59" fill="white" stroke="#dadce0" stroke-width="2"/>
+  <g stroke="#9aa0a6" stroke-width="2.6" fill="none"><circle cx="605" cy="510" r="8"/><path d="m610 516 7 7"/></g>
+  <path d="M1290 503v17m-7-12a8 8 0 0 0 16 0" stroke="#4285f4" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <g font-family="Arial,Helvetica,sans-serif" font-size="17" text-anchor="middle" fill="#3c4043">
+    <rect x="779" y="570" rx="5" width="180" height="46" fill="#f8f9fa"/>
+    <rect x="971" y="570" rx="5" width="170" height="46" fill="#f8f9fa"/>
+    <text x="869" y="598">Pesquisa Google</text>
+    <text x="1056" y="598">Estou com sorte</text>
+  </g>
+  <rect x="0" y="986" width="1920" height="94" fill="#f2f2f2"/>
+  <path d="M0 1032h1920" stroke="#dadce0"/>
+  <g font-family="Arial,Helvetica,sans-serif" font-size="18" fill="#70757a">
+    <text x="50" y="1015">Brasil</text>
+    <text x="50" y="1062">Publicidade</text><text x="180" y="1062">Negócios</text><text x="280" y="1062">Como funciona a Pesquisa</text>
+    <text x="1604" y="1062">Privacidade</text><text x="1733" y="1062">Termos</text><text x="1812" y="1062">Configurações</text>
+  </g>
+</svg>

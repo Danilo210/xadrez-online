@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0c0d10">
+  <meta name="description" content="Xadrez multiplayer com partidas privadas online, visual clássico e personalização.">
+  <title>Xadrez Online — Jogue com um amigo</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-theme="dark">
+  <main id="app" class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Xadrez Online - Início">
+        <span class="brand-icon">♞</span>
+        <span class="brand-name">XEQUE<span class="accent">.</span>ONLINE <small>duelo entre amigos</small></span>
+      </a>
+      <div class="top-actions">
+        <span id="connection" class="connection"><span class="dot"></span> Conectando...</span>
+        <div class="theme-switch" role="group" aria-label="Cor do fundo">
+          <button id="darkTheme" class="theme-button active" type="button" aria-pressed="true" title="Fundo preto">☾ <span>Preto</span></button>
+          <button id="lightTheme" class="theme-button" type="button" aria-pressed="false" title="Fundo branco">☀ <span>Branco</span></button>
+        </div>
+      </div>
+    </header>
+
+    <section id="lobby" class="lobby" aria-labelledby="lobbyTitle">
+      <div class="lobby-art" aria-hidden="true"><div class="art-halo"></div><span>♚</span><span>♔</span></div>
+      <div class="lobby-panel">
+        <div class="eyebrow">PARTIDAS EM TEMPO REAL</div>
+        <h1 id="lobbyTitle">Uma partida. <em>Dois jogadores.</em></h1>
+        <p>Informe seu nome e jogue xadrez com alguém em outro celular ou computador.</p>
+        <form id="lobbyForm" autocomplete="off">
+          <label for="playerName">Seu nome</label>
+          <input id="playerName" name="name" type="text" maxlength="22" placeholder="Como podemos chamar você?" required autocomplete="nickname">
+          <button id="createRoom" class="primary-action" type="submit">Criar sala <span aria-hidden="true">↗</span></button>
+          <div class="or-divider"><span>ou entre com um código</span></div>
+          <label for="roomInput">Código da sala</label>
+          <div class="join-row">
+            <input id="roomInput" type="text" maxlength="6" placeholder="EX.: A7K9X2" aria-label="Código de seis caracteres" autocapitalize="characters" spellcheck="false">
+            <button type="button" id="joinRoom" class="secondary-action">Entrar</button>
+          </div>
+          <p id="lobbyError" class="error-message" role="alert" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+
+    <section id="game" class="game-layout hidden" aria-label="Tabuleiro e informações da partida">
+      <div class="board-section">
+        <div class="board-top">
+          <span class="section-tag">SALA <strong id="roomTag">------</strong></span>
+          <button class="text-button" id="leaveRoom" type="button">Sair da sala <span aria-hidden="true">↗</span></button>
+        </div>
+        <div class="opponent player-line">
+          <span class="avatar" id="opponentAvatar">?</span>
+          <span class="player-description"><strong id="opponentName">Aguardando...</strong><small id="opponentSide">Adversário</small></span>
+          <span class="state-dot" id="opponentOnline" title="Estado do adversário"></span>
+        </div>
+        <div id="board" class="chessboard" role="grid" aria-label="Tabuleiro de xadrez. Selecione uma peça e depois uma casa contornada."></div>
+        <div class="player-line self">
+          <span class="avatar avatar-self" id="selfAvatar">J</span>
+          <span class="player-description"><strong id="selfName">Você</strong><small id="selfSide">Suas peças</small></span>
+          <span class="you-badge">VOCÊ</span>
+        </div>
+      </div>
+
+      <aside class="sidebar">
+        <div class="status-card">
+          <div class="eyebrow">STATUS DA PARTIDA</div>
+          <h2 id="turnText">Aguardando adversário</h2>
+          <p id="statusDetail">Compartilhe o código da sala com um amigo para começar.</p>
+          <div id="turnIndicator" class="turn-indicator"><span class="indicator-piece">♙</span><span id="turnColor">Brancas começam</span></div>
+        </div>
+        <div class="share-card">
+          <div class="card-label">CONVIDAR JOGADOR</div>
+          <div class="share-code" id="roomCode">------</div>
+          <button type="button" id="copyInvite" class="secondary-action full">Copiar link da partida <span aria-hidden="true">⧉</span></button>
+          <small>Envie o link para alguém jogar com você.</small>
+        </div>
+        <div class="history-card">
+          <div class="card-label">HISTÓRICO DE JOGADAS</div>
+          <div id="moveHistory" class="move-history" aria-live="polite"><div class="history-empty">Os movimentos aparecerão aqui.</div></div>
+          <button id="rematchBtn" class="secondary-action full hidden" type="button">Solicitar revanche</button>
+        </div>
+        <div class="tip-card"><span class="tip-icon">◉</span><span><strong>Como jogar</strong><small>Clique em uma peça e depois em uma casa com <b>contorno grosso verde</b>. Capturas aparecem com contorno vermelho.</small></span></div>
+      </aside>
+    </section>
+    <footer class="page-footer">XADREZ ONLINE <span>•</span> PARTIDAS PRIVADAS EM TEMPO REAL</footer>
+  </main>
+
+  <div id="opacityDock" class="opacity-dock">
+    <span aria-hidden="true" class="dock-icon">◐</span>
+    <label for="opacityRange">Transparência</label>
+    <input id="opacityRange" type="range" min="0" max="100" value="100" step="1" aria-label="Visibilidade dos elementos, 0 invisível e 100 visível">
+    <output id="opacityValue" for="opacityRange">100%</output>
+  </div>
+
+  <div id="promotionModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="promotionTitle">
+    <div class="modal-card">
+      <div class="eyebrow">PROMOÇÃO DO PEÃO</div>
+      <h2 id="promotionTitle">Escolha sua peça</h2>
+      <div id="promotionChoices" class="promotion-choices"></div>
+      <button id="cancelPromotion" type="button" class="text-button">Cancelar</button>
+    </div>
+  </div>
+
+  <div id="screensaver" class="screensaver hidden" role="button" tabindex="0" aria-label="Protetor de tela. Clique para voltar ao xadrez.">
+    <img src="google-preview.svg" alt="Imagem ilustrativa da página de pesquisa do Google" draggable="false">
+    <div class="wake-bubble">Clique em qualquer lugar para voltar ao xadrez <span>↵</span></div>
+  </div>
+
+  <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="client.js" defer></script>
+</body>
+</html>

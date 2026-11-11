@@ -1,0 +1,18 @@
+{
+  "name": "xadrez-sala-online",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Xadrez multiplayer com salas privadas, temas, transparência e descanso de tela.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --test"
+  },
+  "engines": {"node": ">=20"},
+  "dependencies": {
+    "chess.js": "^1.4.0",
+    "express": "^4.21.2",
+    "socket.io": "^4.8.1"
+  }
+}
