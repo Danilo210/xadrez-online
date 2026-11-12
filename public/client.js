@@ -325,9 +325,9 @@ function playerInfo() {
   $("selfName").textContent = me?.name || playerName;
   $("selfAvatar").textContent = (me?.name || playerName || "J").charAt(0).toUpperCase();
   $("selfSide").textContent = gameState.yourColor === "w" ? "Peças brancas" : "Peças pretas";
-  $("opponentName").textContent = opponent?.name || "Esperando jogador...";
-  $("opponentAvatar").textContent = opponent?.name?.charAt(0).toUpperCase() || "?";
-  $("opponentSide").textContent = `${oppColor === "w" ? "Peças brancas" : "Peças pretas"}${opponent && !opponent.connected ? " · desconectado" : ""}`;
+  $("opponentName").textContent = opponent?.connected ? opponent.name : "Aguardando jogador...";
+  $("opponentAvatar").textContent = opponent?.connected ? opponent.name.charAt(0).toUpperCase() : "?";
+  $("opponentSide").textContent = `${oppColor === "w" ? "Peças brancas" : "Peças pretas"}${!opponent ? " · vaga disponível" : !opponent.connected ? ` · ${opponent.name} saiu` : ""}`;
   $("opponentOnline").classList.toggle("online", Boolean(opponent?.connected));
 }
 function turnInfo() {
@@ -337,8 +337,10 @@ function turnInfo() {
   let main = s.status.message;
   let description = ownTurn ? "Sua vez! Selecione uma peça." : "Aguarde o adversário fazer seu lance.";
   if (!s.isReady) {
-    main = s.players.w && s.players.b ? "Jogador desconectado" : "Aguardando adversário";
-    description = s.players.w && s.players.b ? "A partida continua quando o jogador retornar." : "Compartilhe o link ou código da sala com um amigo.";
+    main = s.moves.length ? "Partida pausada — aguardando jogador" : "Aguardando adversário";
+    description = s.moves.length
+      ? "Peças e jogadas preservadas. Compartilhe o link: quem entrar assume a vaga e continua deste ponto."
+      : "Compartilhe o código da sala. O próximo jogador assume a vaga disponível.";
   } else if (s.status.done) {
     description = "Partida encerrada. Os dois jogadores podem pedir uma revanche.";
   } else if (s.status.kind === "check") {
@@ -346,7 +348,8 @@ function turnInfo() {
   }
   $("turnText").textContent = main;
   $("statusDetail").textContent = description;
-  $("turnColor").textContent = `Vez de ${active?.name || (s.turn === "w" ? "Brancas" : "Pretas")}${!s.status.done && ownTurn && s.isReady ? " (você)" : ""}`;
+  const turnName = active?.connected ? active.name : `quem jogar com as ${s.turn === "w" ? "brancas" : "pretas"}`;
+  $("turnColor").textContent = `Vez de ${turnName}${!s.status.done && ownTurn && s.isReady ? " (você)" : ""}`;
   $("turnIndicator").querySelector(".indicator-piece").textContent = s.turn === "w" ? "♙" : "♟︎";
   $("rematchBtn").classList.toggle("hidden", !s.status.done);
   $("rematchBtn").textContent = s.rematch[s.yourColor] ? "Revanche solicitada ✓" : "Solicitar revanche";

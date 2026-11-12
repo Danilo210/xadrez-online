@@ -120,19 +120,22 @@ function clearMembership(socket, removeSlot = true) {
   const member = room?.members[color];
   if (!member || member.socketId !== socket.id) return;
   if (removeSlot) {
+    // Saída voluntária libera apenas a cadeira: a posição e o histórico permanecem.
     room.members[color] = null;
-    room.rematch = { w: false, b: false };
-    room.chess = new Chess();
+    room.rematch[color] = false;
   } else {
+    // Queda de conexão: o antigo jogador pode voltar enquanto a vaga não for ocupada.
+    // Outra pessoa pode assumir a mesma cor imediatamente, sem esperar o prazo de limpeza.
     member.socketId = null;
     member.disconnectedAt = Date.now();
   }
-  if (!room.members.w && !room.members.b) rooms.delete(code);
-  else publish(room);
+  // Mesmo que ambos saiam, a sala fica acessível até expirar por inatividade.
+  publish(room);
 }
 
 function attach(socket, room, color, name, token) {
   const old = room.members[color];
+  const reconnecting = old?.token === token;
   if (old?.socketId && old.socketId !== socket.id) {
     const oldSocket = io.sockets.sockets.get(old.socketId);
     if (oldSocket) {
@@ -142,7 +145,10 @@ function attach(socket, room, color, name, token) {
       oldSocket.emit("game:kicked", "Esta sessão foi aberta em outra aba.");
     }
   }
-  room.members[color] = { name: old?.name || name, token, socketId: socket.id, disconnectedAt: null };
+  // Uma pessoa nova recebe seu próprio nome, mas herda a cor e os lances da vaga.
+  // Somente a reconexão do titular preserva o nome anterior.
+  if (!reconnecting) room.rematch[color] = false;
+  room.members[color] = { name: reconnecting ? old.name : name, token, socketId: socket.id, disconnectedAt: null };
   socket.data.roomId = room.id;
   socket.data.color = color;
   socket.join(room.id);
@@ -175,7 +181,9 @@ io.on("connection", socket => {
     const room = rooms.get(code);
     if (!room) return ackSafely(ack, { ok: false, error: "Sala não encontrada. Peça um novo convite." });
     const color = ["w", "b"].find(c => room.members[c]?.token === input.token)
-      || ["w", "b"].find(c => !room.members[c]);
+      || ["w", "b"].find(c => !room.members[c])
+      // Quem fechou o navegador deixa a cadeira disponível para o próximo visitante.
+      || ["w", "b"].find(c => !room.members[c]?.socketId);
     if (!color) return ackSafely(ack, { ok: false, error: "A sala já tem dois jogadores." });
     clearMembership(socket, true);
     attach(socket, room, color, name, input.token);
@@ -253,10 +261,11 @@ const cleanup = setInterval(() => {
       }
     }
     if (removed) {
-      room.chess = new Chess();
-      room.rematch = { w: false, b: false };
+      // O jogador não retornou no prazo: libera a vaga, sem reiniciar a partida.
+      // Invalida apenas uma eventual solicitação de revanche feita por ele.
+      for (const color of ["w", "b"]) if (!room.members[color]) room.rematch[color] = false;
     }
-    if ((!room.members.w && !room.members.b) || (!room.members.w?.socketId && !room.members.b?.socketId && now - room.updatedAt > ROOM_IDLE_TTL_MS)) rooms.delete(room.id);
+    if (!room.members.w?.socketId && !room.members.b?.socketId && now - room.updatedAt > ROOM_IDLE_TTL_MS) rooms.delete(room.id);
     else if (removed) publish(room);
   }
 }, 15 * 1000);

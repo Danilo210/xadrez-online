@@ -6,6 +6,7 @@ Aplicativo web de xadrez para **2 pessoas em tempo real**, com código/link de c
 
 - Nome obrigatório antes de criar ou entrar em uma sala.
 - Salas com 6 caracteres e convite por link; branco cria e preto entra.
+- **Substituição de jogadores:** se alguém clicar em sair ou fechar o navegador, outra pessoa pode entrar na mesma sala e assumir as peças que ficaram. **O tabuleiro, a vez e o histórico de lances não são reiniciados.**
 - Exibição do jogador da vez; situação de xeque, xeque-mate, empate e histórico dos lances.
 - Casas disponíveis **com contorno espesso verde** e capturas **com contorno espesso vermelho**; peça selecionada com borda dourada.
 - Fundo preto ou branco; escolha salva no navegador.
@@ -40,7 +41,8 @@ O arquivo `render.yaml` também permite criar o serviço usando um **Blueprint**
 ## Limitações
 
 - As salas e partidas são temporárias e se perdem quando o servidor reinicia/adormece (por exemplo, em planos gratuitos).
-- A reserva de vaga de um participante desconectado expira em aproximadamente 2 minutos. Passado esse tempo, o outro participante pode receber uma nova pessoa na mesma sala, com partida reiniciada.
+- Se o participante desconectar, a vaga pode ser assumida por outro jogador **imediatamente**. Enquanto ninguém substituí-lo, ele ainda pode reconectar com a mesma aba. Após aproximadamente 2 minutos, a identidade desconectada é liberada; a posição nunca é reiniciada por isso.
+- Se os dois jogadores saírem, a sala e a partida permanecem em memória por até aproximadamente 1 hora de inatividade, desde que o servidor continue ativo.
 - Para muitas partidas simultâneas ou escalabilidade com mais instâncias, adicionar Redis + adapter do Socket.IO e persistir os jogos em um banco de dados.
 - A tela de pesquisa em descanso de tela é uma **ilustração estática** feita em SVG, não uma página real nem um formulário de coleta de dados.
 
