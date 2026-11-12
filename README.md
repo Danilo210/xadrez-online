@@ -56,3 +56,7 @@ public/client.js      Renderização, ações, rede, transparência e inatividad
 public/google-preview.svg   Imagem local do descanso de tela
 public/favicon.svg
 ```
+
+## Ajuste visual v1.1.1
+
+Contorno escuro das peças brancas reduzido de 1,1 px para 0,35 px, com sombra suavizada. A espessura dos destaques das casas possíveis permanece inalterada.
