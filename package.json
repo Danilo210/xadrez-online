@@ -1,6 +1,6 @@
 {
   "name": "xadrez-sala-online",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "private": true,
   "description": "Xadrez multiplayer com salas privadas, temas, transparência e descanso de tela.",
   "main": "server.js",

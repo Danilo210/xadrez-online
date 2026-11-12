@@ -3,7 +3,8 @@
 const $ = id => document.getElementById(id);
 const socket = io();
 const glyphs = {
-  K: "♔", Q: "♕", R: "♖", B: "♗", N: "♘", P: "♙",
+  // Símbolos sólidos permitem preencher as peças brancas realmente de branco.
+  K: "♚", Q: "♛", R: "♜", B: "♝", N: "♞", P: "♟︎",
   k: "♚", q: "♛", r: "♜", b: "♝", n: "♞", p: "♟︎"
 };
 const namesOfPieces = {
@@ -301,6 +302,7 @@ function showPromotion() {
     const btn = document.createElement("button");
     const p = gameState.yourColor === "w" ? promotion.toUpperCase() : promotion;
     btn.textContent = glyphs[p];
+    btn.classList.add("promotion-piece", gameState.yourColor === "w" ? "white" : "black");
     btn.setAttribute("aria-label", namesOfPieces[promotion]);
     btn.addEventListener("click", () => {
       const move = { ...promotionMove, promotion };
@@ -350,7 +352,10 @@ function turnInfo() {
   $("statusDetail").textContent = description;
   const turnName = active?.connected ? active.name : `quem jogar com as ${s.turn === "w" ? "brancas" : "pretas"}`;
   $("turnColor").textContent = `Vez de ${turnName}${!s.status.done && ownTurn && s.isReady ? " (você)" : ""}`;
-  $("turnIndicator").querySelector(".indicator-piece").textContent = s.turn === "w" ? "♙" : "♟︎";
+  const turnPiece = $("turnIndicator").querySelector(".indicator-piece");
+  turnPiece.textContent = "♟︎";
+  turnPiece.classList.toggle("white", s.turn === "w");
+  turnPiece.classList.toggle("black", s.turn === "b");
   $("rematchBtn").classList.toggle("hidden", !s.status.done);
   $("rematchBtn").textContent = s.rematch[s.yourColor] ? "Revanche solicitada ✓" : "Solicitar revanche";
   $("rematchBtn").disabled = Boolean(s.rematch[s.yourColor]) || !s.isReady;

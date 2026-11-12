@@ -57,6 +57,6 @@ public/google-preview.svg   Imagem local do descanso de tela
 public/favicon.svg
 ```
 
-## Ajuste visual v1.1.1
+## Ajuste visual v1.1.2
 
-Contorno escuro das peças brancas reduzido de 1,1 px para 0,35 px, com sombra suavizada. A espessura dos destaques das casas possíveis permanece inalterada.
+As peças brancas agora usam **símbolos sólidos, preenchimento branco puro (#FFFFFF)** e **contorno preto discreto (0,85 px, desenhado por trás do preenchimento)** para se diferenciarem das peças pretas. O mesmo estilo é usado no indicador da vez e na promoção de peças. Os contornos verdes e vermelhos que destacam os movimentos continuam iguais.

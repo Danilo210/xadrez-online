@@ -32,3 +32,11 @@ test('o protetor de tela surge em 30 segundos, com clique para voltar', () => {
   assert.match(client, /}, 30000\)/);
   assert.match(client, /"screensaver"\)\.addEventListener\("click", wakeUp\)/);
 });
+
+test('peças brancas são completamente preenchidas de branco com contorno preto fino', () => {
+  const css = read('public/styles.css');
+  const client = read('public/client.js');
+  assert.match(client, /K: "♚", Q: "♛", R: "♜", B: "♝", N: "♞", P: "♟︎"/);
+  assert.match(css, /\.square \.piece\.white \{ color: #ffffff; -webkit-text-stroke: \.85px #161719; paint-order: stroke fill;/);
+  assert.match(client, /promotion-piece/);
+});
